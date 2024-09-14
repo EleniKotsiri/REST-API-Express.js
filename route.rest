@@ -1,0 +1,29 @@
+GET http://localhost:8080/items
+
+###
+
+GET http://localhost:8080/items/4
+
+###
+
+POST http://localhost:8080/items HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Item 4",
+  "description": "This is a new item on the list"
+}
+
+###
+
+PUT http://localhost:8080/items/1 HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Item 1 updated",
+  "description": "This is the first item with an updated description."
+}
+
+###
+
+DELETE http://localhost:8080/items/1
