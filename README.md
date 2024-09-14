@@ -4,7 +4,7 @@ Will be continuously updated with more functionality.
 
 ## Installation
 
-Initializing Node.js:
+Initialize Node.js:
 ```
 npm init -y
 ```
