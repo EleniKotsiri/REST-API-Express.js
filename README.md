@@ -99,6 +99,8 @@ app.listen(port, () => {
 })
 ```
 
+#### Configure your .env file in case you want to use a different port
+
 #### Update package.json file to include a start script using nodemon:
 ```
 "scripts": {
