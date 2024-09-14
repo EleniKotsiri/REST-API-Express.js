@@ -27,6 +27,15 @@ const DUMMY_ITEMS = [
   },
 ];
 
+// Validation middleware
+const validateItem = (req, res, next) => {
+  const { name, description } = req.body;
+  if (!name || !description) {
+    return res.status(400).json({ message: 'Name and description are required' });
+  }
+  next();
+};
+
 // GET all items
 app.get('/items', (req, res) => {
   res.json(DUMMY_ITEMS);
@@ -40,7 +49,7 @@ app.get('/items/:id', (req, res) => {
 });
 
 // POST a new item
-app.post('/items', (req, res) => {
+app.post('/items', validateItem, (req, res) => {
   const newItem = {
     id: DUMMY_ITEMS.length + 1,
     name: req.body.name,
@@ -51,7 +60,7 @@ app.post('/items', (req, res) => {
 });
 
 // PUT (update) an item by ID
-app.put('/items/:id', (req, res) => {
+app.put('/items/:id', validateItem, (req, res) => {
   const item = DUMMY_ITEMS.find(i => i.id === parseInt(req.params.id));
   if (!item) return res.status(404).json({ message: 'Item not found' });
 
