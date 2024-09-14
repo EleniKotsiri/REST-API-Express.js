@@ -5,12 +5,12 @@ Will be continuously updated with more functionality.
 ## Installation
 
 Initializing Node.js:
-```bash
+```
 npm init -y
 ```
 
 Install Express, nodemon, dotenv packages for development:
-```bash
+```
 npm install express
 npm install --save-dev nodemon
 npm install --save-dev dotenv
@@ -19,7 +19,7 @@ npm install --save-dev dotenv
 ## Usage
 
 ### Create the Server
-Update the index.js file as following:
+#### Update the index.js file as following:
 ```
 import express from "express";
 import dotenv from 'dotenv';
@@ -96,4 +96,17 @@ app.delete('/items/:id', (req, res) => {
 app.listen(port, () => {
   console.log(`listening at http://localhost:${port}`);
 })
+```
+
+#### Update package.json file to include a start script using nodemon:
+```
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+```
+
+#### Run the server
+```
+npm run dev
 ```
