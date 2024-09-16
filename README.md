@@ -17,99 +17,127 @@ npm install --save-dev nodemon
 npm install --save-dev dotenv
 ```
 
+## Project Structure
+```
+/rest-api-express.js
+│
+├── /node_modules         # Installed npm modules
+├── index.js              # Main server file
+├── package.json          # Project dependencies and scripts
+├── route.rest            # File to send HTTP requests and view response directly in VS code using REST Client extension
+└── README.md             # Project documentation
+```
+
 ## Usage
 
-### Create the Server
-#### Update the index.js file as following:
-```
-import express from "express";
-import dotenv from 'dotenv';
+### Create the Server in your index.js file
 
-const app = express();
-dotenv.config();
-const port = process.env.PORT || 3000;
+### Configure your .env file in case you want to use a different port
 
-// Middleware to parse JSON
-app.use(express.json());
-
-// dummy data
-const DUMMY_ITEMS = [
-  {
-    id: 1,
-    name: 'item 1',
-    description: 'This is the first item'
-  },
-  {
-    id: 2,
-    name: 'item 2',
-    description: 'This is the second item'
-  },
-  {
-    id: 3,
-    name: 'item 3',
-    description: 'This is the third item'
-  },
-];
-
-// GET all items
-app.get('/items', (req, res) => {
-  res.json(DUMMY_ITEMS);
-});
-
-// GET a single item by ID
-app.get('/items/:id', (req, res) => {
-  const item = DUMMY_ITEMS.find(i => i.id === parseInt(req.params.id));
-  if (!item) return res.status(404).json({ message: 'Item not found' });
-  res.json(item);
-});
-
-// POST a new item
-app.post('/items', (req, res) => {
-  const newItem = {
-    id: DUMMY_ITEMS.length + 1,
-    name: req.body.name,
-    description: req.body.description
-  };
-  DUMMY_ITEMS.push(newItem);
-  res.status(201).json(newItem);
-});
-
-// PUT (update) an item by ID
-app.put('/items/:id', (req, res) => {
-  const item = DUMMY_ITEMS.find(i => i.id === parseInt(req.params.id));
-  if (!item) return res.status(404).json({ message: 'Item not found' });
-
-  item.name = req.body.name;
-  item.description = req.body.description;
-  res.json(item);
-});
-
-// DELETE an item by ID
-app.delete('/items/:id', (req, res) => {
-  const itemIndex = DUMMY_ITEMS.findIndex(i => i.id === parseInt(req.params.id));
-  if (itemIndex === -1) return res.status(404).json({ message: 'Item not found' });
-
-  DUMMY_ITEMS.splice(itemIndex, 1);
-  res.status(204).send();
-});
-
-
-app.listen(port, () => {
-  console.log(`listening at http://localhost:${port}`);
-})
-```
-
-#### Configure your .env file in case you want to use a different port
-
-#### Update package.json file to include a start script using nodemon:
+### Update package.json file to include a start script using nodemon
 ```
 "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
 ```
 
-#### Run the server
+### Run the server using nodemon for development, node for production
 ```
 npm run dev
 ```
+
+```
+npm run start
+```
+
+## API Endpoints
+
+### GET /items
+#### Retrieve all items
+#### Response example
+```json
+[
+  {
+    "id": 1,
+    "name": "item 1",
+    "description": "This is the first item"
+  },
+  {
+    "id": 2,
+    "name": "item 2",
+    "description": "This is the second item"
+  },
+  {
+    "id": 3,
+    "name": "item 3",
+    "description": "This is the third item"
+  }
+]
+```
+
+### GET /items/:id
+#### Retrieve a single item
+#### Response example
+```json
+{
+  "id": 1,
+  "name": "item 1",
+  "description": "This is the first item"
+}
+```
+
+### POST /items
+#### Create a new item. The request body must contain name and description.
+#### Request example
+```json
+{
+  "name": "Item 4",
+  "description": "This is a new item on the list"
+}
+```
+#### Response example
+```json
+{
+  "id": 4,
+  "name": "Item 4",
+  "description": "This is a new item on the list"
+}
+```
+
+### PUT /items/:id
+#### Update an existing item by its id. The request body must contain name and description.
+#### Request example
+```json
+{
+  "name": "Item 1 updated",
+  "description": "This is the first item with an updated description."
+}
+```
+#### Response example
+```json
+{
+  "id": 1,
+  "name": "Item 1 updated",
+  "description": "This is the first item with an updated description."
+}
+```
+
+### DELETE /items/:id
+#### Deletes an item by its id
+#### Response example
+```json
+HTTP/1.1 204 No Content
+```
+
+## Validation
+The `POST` and `PUT` requests use middleware to validate the request body. When the name or description fields are missing, the API returns a `400 Bad Request` response
+```json
+{
+  "message": "Name and description are required"
+}
+```
+
+## License
+### This project is licensed under the [MIT](https://choosealicense.com/licenses/mit/) License.
